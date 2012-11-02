@@ -383,7 +383,7 @@ abstract class CI_DB_forge {
 			: 'CREATE TABLE';
 
 		$columns = $this->_process_fields(TRUE);
-		for ($c = count($columns); $i < $c; $i++)
+		for ($i = 0, $c = count($columns); $i < $c; $i++)
 		{
 			$columns[$i] = ($columns[$i]['_literal'] !== FALSE)
 					? "\n\t".$columns[$i]['_literal']
