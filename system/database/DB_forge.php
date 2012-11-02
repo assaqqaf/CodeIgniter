@@ -373,9 +373,9 @@ abstract class CI_DB_forge {
 	 */
 	protected function _create_table($table, $if_not_exists)
 	{
-		if ($if_not_exists === TRUE)
+		if ($if_not_exists === TRUE && $this->_create_table_if === FALSE)
 		{
-			if ($this->_create_table_if === FALSE && $this->db->table_exists($table))
+			if ($this->db->table_exists($table))
 			{
 				return TRUE;
 			}
@@ -483,7 +483,7 @@ abstract class CI_DB_forge {
 			}
 			else
 			{
-				$sql = sprintf($this->_drop_table, $this->db->escape_identifiers($table));
+				$sql = sprintf($this->_drop_table_if, $this->db->escape_identifiers($table));
 			}
 		}
 
