@@ -387,7 +387,7 @@ abstract class CI_DB_forge {
 		{
 			$columns[$i] = ($columns[$i]['_literal'] !== FALSE)
 					? "\n\t".$columns[$i]['_literal']
-					: "\n\t".$this->_process_column($column[$i]);
+					: "\n\t".$this->_process_column($columns[$i]);
 		}
 
 		$columns = implode(',', $columns)
