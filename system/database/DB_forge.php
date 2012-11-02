@@ -405,7 +405,7 @@ abstract class CI_DB_forge {
 			$this->db->escape_identifiers($table),
 			$columns
 		);
-
+var_dump($sql);
 		return $sql;
 	}
 

@@ -24,6 +24,7 @@
  * @since		Version 2.1.0
  * @filesource
  */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * PDO PostgreSQL Forge Class
