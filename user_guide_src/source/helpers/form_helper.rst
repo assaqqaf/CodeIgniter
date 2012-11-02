@@ -468,17 +468,14 @@ form_prep()
 
 Allows you to safely use HTML and characters such as quotes within form
 elements without breaking out of the form. Consider this example
-
 ::
 
 	$string = 'Here is a string containing "quoted" text.';
 	<input type="text" name="myform" value="$string" />
 
 Since the above string contains a set of quotes it will cause the form
-to break. The `form_prep()` function converts HTML so that it can be used
-safely
-
-::
+to break. The ``form_prep()`` function converts HTML so that it can be used
+safely::
 
 	<input type="text" name="myform" value="<?php echo form_prep($string); ?>" />
 

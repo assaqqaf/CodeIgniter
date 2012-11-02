@@ -34,29 +34,69 @@
  */
 class CI_DB_pdo_4d_forge extends CI_DB_4d_forge {
 
+	/**
+	 * CREATE DATABASE statement
+	 *
+	 * @var	string
+	 */
 	protected $_create_database	= 'CREATE SCHEMA %s';
+
+	/**
+	 * DROP DATABASE statement
+	 *
+	 * @var	string
+	 */
 	protected $_drop_database	= 'DROP SCHEMA %s';
+
+	/**
+	 * CREATE TABLE IF statement
+	 *
+	 * @var	string
+	 */
 	protected $_create_table_if	= 'CREATE TABLE IF NOT EXISTS';
+
+	/**
+	 * RENAME TABLE statement
+	 *
+	 * @var	string
+	 */
 	protected $_rename_table	= FALSE;
+
+	/**
+	 * DROP TABLE IF statement
+	 *
+	 * @var	string
+	 */
 	protected $_drop_table_if	= 'DROP TABLE IF EXISTS';
+
+	/**
+	 * UNSIGNED support
+	 *
+	 * @var	array
+	 */
 	protected $_unsigned		= array(
 		'INT16'		=> 'INT',
 		'SMALLINT'	=> 'INT',
 		'INT'		=> 'INT64',
 		'INT32'		=> 'INT64'
 	);
-	protected $_default		= FALSE;
 
 	/**
-	 * Alter table query
+	 * DEFAULT value representation in CREATE/ALTER TABLE statements
 	 *
-	 * Generates a platform-specific query so that a table can be altered
-	 * Called by add_column(), drop_column(), and column_alter(),
+	 * @var	string
+	 */
+	protected $_default		= FALSE;
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * ALTER TABLE
 	 *
-	 * @param	string	the ALTER type (ADD, DROP, CHANGE)
-	 * @param	string	the table name
-	 * @param	mixed	the column definition
-	 * @return	mixed
+	 * @param	string	$alter_type	ALTER type
+	 * @param	string	$table		Table name
+	 * @param	mixed	$field		Column definition
+	 * @return	string|string[]
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{
@@ -72,9 +112,9 @@ class CI_DB_pdo_4d_forge extends CI_DB_4d_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Process a single column
+	 * Process column
 	 *
-	 * @param	array
+	 * @param	array	$field
 	 * @return	string
 	 */
 	protected function _process_column($field)

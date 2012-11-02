@@ -34,24 +34,40 @@
  */
 class CI_DB_pdo_ibm_forge extends CI_DB_pdo_forge {
 
+	/**
+	 * RENAME TABLE IF statement
+	 *
+	 * @var	string
+	 */
 	protected $_rename_table	= 'RENAME TABLE %s TO %s';
+
+	/**
+	 * UNSIGNED support
+	 *
+	 * @var	array
+	 */
 	protected $_unsigned		= array(
 		'SMALLINT'	=> 'INTEGER',
 		'INT'		=> 'BIGINT',
 		'INTEGER'	=> 'BIGINT'
 	);
-	protected $_default		= FALSE;
 
 	/**
-	 * Alter table query
+	 * DEFAULT value representation in CREATE/ALTER TABLE statements
 	 *
-	 * Generates a platform-specific query so that a table can be altered
-	 * Called by add_column(), drop_column(), and column_alter(),
+	 * @var	string
+	 */
+	protected $_default		= FALSE;
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * ALTER TABLE
 	 *
-	 * @param	string	the ALTER type (ADD, DROP, CHANGE)
-	 * @param	string	the table name
-	 * @param	mixed	the column definition
-	 * @return	mixed
+	 * @param	string	$alter_type	ALTER type
+	 * @param	string	$table		Table name
+	 * @param	mixed	$field		Column definition
+	 * @return	string|string[]
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{

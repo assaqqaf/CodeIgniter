@@ -34,8 +34,14 @@
  */
 class CI_DB_pdo_odbc_forge extends CI_DB_pdo_forge {
 
+	/**
+	 * UNSIGNED support
+	 *
+	 * @var	bool|array
+	 */
 	protected $_unsigned		= FALSE;
-	protected $_null		= '';
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Field attribute AUTO_INCREMENT

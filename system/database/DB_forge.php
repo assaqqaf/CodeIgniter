@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
  * CodeIgniter
  *
@@ -24,6 +24,7 @@
  * @since		Version 1.0
  * @filesource
  */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Database Forge Class
@@ -34,25 +35,113 @@
  */
 abstract class CI_DB_forge {
 
+	/**
+	 * Fields data
+	 *
+	 * @var	array
+	 */
 	public $fields		= array();
-	public $keys		= array();
-	public $primary_keys	= array();
-	public $db_char_set	= '';
-
-	// Platform specific SQL strings
-	protected $_create_database	= 'CREATE DATABASE %s;';
-	protected $_drop_database	= 'DROP DATABASE %s;';
-	protected $_create_table	= "%s %s (%s\n)";
-	protected $_create_table_if	= 'CREATE TABLE IF NOT EXISTS';
-	protected $_create_table_keys	= FALSE;
-	protected $_rename_table	= 'ALTER TABLE %s RENAME TO %s;';
-	protected $_drop_table_if	= 'DROP TABLE IF EXISTS';
-	protected $_unsigned		= TRUE;
-	protected $_null		= '';
-	protected $_default		= ' DEFAULT ';
 
 	/**
-	 * Constructor
+	 * Keys data
+	 *
+	 * @var	array
+	 */
+	public $keys		= array();
+
+	/**
+	 * Primary Keys data
+	 *
+	 * @var	array
+	 */
+	public $primary_keys	= array();
+
+	/**
+	 * Database character set
+	 *
+	 * @var	string
+	 */
+	public $db_char_set	= '';
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * CREATE DATABASE statement
+	 *
+	 * @var	string
+	 */
+	protected $_create_database	= 'CREATE DATABASE %s';
+
+	/**
+	 * DROP DATABASE statement
+	 *
+	 * @var	string
+	 */
+	protected $_drop_database	= 'DROP DATABASE %s';
+
+	/**
+	 * CREATE TABLE statement
+	 *
+	 * @var	string
+	 */
+	protected $_create_table	= "%s %s (%s\n)";
+
+	/**
+	 * CREATE TABLE IF statement
+	 *
+	 * @var	string
+	 */
+	protected $_create_table_if	= 'CREATE TABLE IF NOT EXISTS';
+
+	/**
+	 * CREATE TABLE keys flag
+	 *
+	 * Whether table keys are created from within the
+	 * CREATE TABLE statement.
+	 *
+	 * @var	bool
+	 */
+	protected $_create_table_keys	= FALSE;
+
+	/**
+	 * DROP TABLE IF EXISTS statement
+	 *
+	 * @var	string
+	 */
+	protected $_drop_table_if	= 'DROP TABLE IF EXISTS';
+
+	/**
+	 * RENAME TABLE statement
+	 *
+	 * @var	string
+	 */
+	protected $_rename_table	= 'ALTER TABLE %s RENAME TO %s;';
+
+	/**
+	 * UNSIGNED support
+	 *
+	 * @var	bool|array
+	 */
+	protected $_unsigned		= TRUE;
+
+	/**
+	 * NULL value representatin in CREATE/ALTER TABLE statements
+	 *
+	 * @var	string
+	 */
+	protected $_null		= '';
+
+	/**
+	 * DEFAULT value representation in CREATE/ALTER TABLE statements
+	 *
+	 * @var	string
+	 */
+	protected $_default		= ' DEFAULT ';
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Class constructor
 	 *
 	 * @return	void
 	 */
@@ -69,7 +158,7 @@ abstract class CI_DB_forge {
 	/**
 	 * Create database
 	 *
-	 * @param	string	the database name
+	 * @param	string	$db_name
 	 * @return	bool
 	 */
 	public function create_database($db_name)
@@ -96,7 +185,7 @@ abstract class CI_DB_forge {
 	/**
 	 * Drop database
 	 *
-	 * @param	string	the database name
+	 * @param	string	$db_name
 	 * @return	bool
 	 */
 	public function drop_database($db_name)
@@ -132,8 +221,8 @@ abstract class CI_DB_forge {
 	/**
 	 * Add Key
 	 *
-	 * @param	string	key
-	 * @param	bool	primary key
+	 * @param	string	$key
+	 * @param	bool	$primary
 	 * @return	object
 	 */
 	public function add_key($key = '', $primary = FALSE)
@@ -170,7 +259,7 @@ abstract class CI_DB_forge {
 	/**
 	 * Add Field
 	 *
-	 * @param	array
+	 * @param	array	$field
 	 * @return	object
 	 */
 	public function add_field($field = '')
@@ -217,8 +306,8 @@ abstract class CI_DB_forge {
 	/**
 	 * Create Table
 	 *
-	 * @param	string	the table name
-	 * @param	bool	IF NOT EXISTS
+	 * @param	string	$table		Table name
+	 * @param	bool	$if_not_exists	Whether to add IF NOT EXISTS condition
 	 * @return	bool
 	 */
 	public function create_table($table = '', $if_not_exists = FALSE)
@@ -271,8 +360,8 @@ abstract class CI_DB_forge {
 	/**
 	 * Create Table
 	 *
-	 * @param	string	the table name
-	 * @param	bool	should 'IF NOT EXISTS' be added to the SQL
+	 * @param	string	$table		Table name
+	 * @param	bool	$if_not_exists	Whether to add 'IF NOT EXISTS' condition
 	 * @return	mixed
 	 */
 	protected function _create_table($table, $if_not_exists)
@@ -329,8 +418,8 @@ abstract class CI_DB_forge {
 	/**
 	 * Drop Table
 	 *
-	 * @param	string	the table name
-	 * @param	bool	IF EXISTS
+	 * @param	string	$table_name	Table name
+	 * @param	bool	$if_exists	Whether to add an IF EXISTS condition
 	 * @return	bool
 	 */
 	public function drop_table($table_name, $if_exists = FALSE)
@@ -372,8 +461,8 @@ abstract class CI_DB_forge {
 	 *
 	 * Generates a platform-specific DROP TABLE string
 	 *
-	 * @param	string	the table name
-	 * @param	bool
+	 * @param	string	$table		Table name
+	 * @param	bool	$if_exists	Whether to add an IF EXISTS condition
 	 * @return	string
 	 */
 	protected function _drop_table($table, $if_exists)
@@ -403,8 +492,8 @@ abstract class CI_DB_forge {
 	/**
 	 * Rename Table
 	 *
-	 * @param	string	the old table name
-	 * @param	string	the new table name
+	 * @param	string	$table_name	Old table name
+	 * @param	string	$new_table_name	New table name
 	 * @return	bool
 	 */
 	public function rename_table($table_name, $new_table_name)
@@ -441,9 +530,8 @@ abstract class CI_DB_forge {
 	/**
 	 * Column Add
 	 *
-	 * @param	string	the table name
-	 * @param	array	the field properties
-	 * @param	string	AFTER field
+	 * @param	string	$table	Table name
+	 * @param	array	$field	Column definition
 	 * @return	bool
 	 */
 	public function add_column($table = '', $field = array())
@@ -487,8 +575,8 @@ abstract class CI_DB_forge {
 	/**
 	 * Column Drop
 	 *
-	 * @param	string	the table name
-	 * @param	string	the column name
+	 * @param	string	$table		Table name
+	 * @param	string	$column_name	Column name
 	 * @return	bool
 	 */
 	public function drop_column($table = '', $column_name = '')
@@ -517,9 +605,8 @@ abstract class CI_DB_forge {
 	/**
 	 * Column Modify
 	 *
-	 * @param	string	the table name
-	 * @param	string	the column name
-	 * @param	string	the column definition
+	 * @param	string	$table	Table name
+	 * @param	string	$field	Column definition
 	 * @return	bool
 	 */
 	public function modify_column($table = '', $field = array())
@@ -566,15 +653,12 @@ abstract class CI_DB_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Alter table query
+	 * ALTER TABLE
 	 *
-	 * Generates a platform-specific query so that a table can be altered
-	 * Called by add_column(), drop_column(), and column_alter(),
-	 *
-	 * @param	string	the ALTER type (ADD, DROP, CHANGE)
-	 * @param	string	the table name
-	 * @param	mixed	the column name/definition
-	 * @return	mixed
+	 * @param	string	$alter_type	ALTER type
+	 * @param	string	$table		Table name
+	 * @param	mixed	$field		Column definition
+	 * @return	string|string[]
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{
@@ -601,6 +685,7 @@ abstract class CI_DB_forge {
 	/**
 	 * Process fields
 	 *
+	 * @param	bool	$create_table
 	 * @return	array
 	 */
 	protected function _process_fields($create_table = FALSE)
@@ -682,9 +767,9 @@ abstract class CI_DB_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Process a single column
+	 * Process column
 	 *
-	 * @param	array
+	 * @param	array	$field
 	 * @return	string
 	 */
 	protected function _process_column($field)
@@ -863,7 +948,7 @@ abstract class CI_DB_forge {
 	/**
 	 * Process indexes
 	 *
-	 * @param	string
+	 * @param	string	$table
 	 * @return	string
 	 */
 	protected function _create_indexes($table = NULL)

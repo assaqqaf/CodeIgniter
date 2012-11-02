@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
  * CodeIgniter
  *
@@ -24,6 +24,7 @@
  * @since		Version 1.0
  * @filesource
  */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * SQLite Forge Class
@@ -34,14 +35,33 @@
  */
 class CI_DB_sqlite_forge extends CI_DB_forge {
 
+	/**
+	 * CREATE TABLE IF statement
+	 *
+	 * @var	string
+	 */
 	protected $_create_table_if	= FALSE;
+
+	/**
+	 * UNSIGNED support
+	 *
+	 * @var	bool|array
+	 */
 	protected $_unsigned		= FALSE;
+
+	/**
+	 * NULL value representation in CREATE/ALTER TABLE statements
+	 *
+	 * @var	string
+	 */
 	protected $_null		= 'NULL';
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Create database
 	 *
-	 * @param	string	the database name
+	 * @param	string	$db_name	(ignored)
 	 * @return	bool
 	 */
 	public function create_database($db_name = '')
@@ -56,7 +76,7 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 	/**
 	 * Drop database
 	 *
-	 * @param	string	the database name (ignored)
+	 * @param	string	$db_name	(ignored)
 	 * @return	bool
 	 */
 	public function drop_database($db_name = '')
@@ -80,16 +100,13 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Alter table query
-	 *
-	 * Generates a platform-specific query so that a table can be altered
-	 * Called by add_column(), drop_column(), and column_alter(),
+	 * ALTER TABLE
 	 *
 	 * @todo	implement drop_column(), modify_column()
-	 * @param	string	the ALTER type (ADD, DROP, CHANGE)
-	 * @param	string	the table name
-	 * @param	mixed	the column definition
-	 * @return	mixed
+	 * @param	string	$alter_type	ALTER type
+	 * @param	string	$table		Table name
+	 * @param	mixed	$field		Column definition
+	 * @return	string|string[]
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{
@@ -114,9 +131,9 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Process a single column
+	 * Process column
 	 *
-	 * @param	array
+	 * @param	array	$field
 	 * @return	string
 	 */
 	protected function _process_column($field)

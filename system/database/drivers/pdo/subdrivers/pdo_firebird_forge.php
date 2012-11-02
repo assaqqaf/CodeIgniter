@@ -34,18 +34,37 @@
  */
 class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 
+	/**
+	 * RENAME TABLE statement
+	 *
+	 * @var	string
+	 */
 	protected $_rename_table	= FALSE;
+
+	/**
+	 * UNSIGNED support
+	 *
+	 * @var	array
+	 */
 	protected $_unsigned		= array(
 		'SMALLINT'	=> 'INTEGER',
 		'INTEGER'	=> 'INT64',
 		'FLOAT'		=> 'DOUBLE PRECISION'
 	);
+
+	/**
+	 * NULL value representation in CREATE/ALTER TABLE statements
+	 *
+	 * @var	string
+	 */
 	protected $_null		= 'NULL';
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Create database
 	 *
-	 * @param	string	the database name
+	 * @param	string	$db_name
 	 * @return	string
 	 */
 	public function create_database($db_name)
@@ -63,8 +82,7 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	/**
 	 * Drop database
 	 *
-	 * @param	string	the database name
-	 *		- not used in this driver, the current db is dropped
+	 * @param	string	$db_name	(ignored)
 	 * @return	bool
 	 */
 	public function drop_database($db_name = '')
@@ -88,15 +106,12 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Alter table query
+	 * ALTER TABLE
 	 *
-	 * Generates a platform-specific query so that a table can be altered
-	 * Called by add_column(), drop_column(), and column_alter(),
-	 *
-	 * @param	string	the ALTER type (ADD, DROP, CHANGE)
-	 * @param	string	the table name
-	 * @param	mixed	the column definition
-	 * @return	mixed
+	 * @param	string	$alter_type	ALTER type
+	 * @param	string	$table		Table name
+	 * @param	mixed	$field		Column definition
+	 * @return	string|string[]
 	 */
 	protected function _alter_table($alter_type, $table, $field)
  	{
@@ -146,9 +161,9 @@ class CI_DB_pdo_firebird_forge extends CI_DB_pdo_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Process a single column
+	 * Process column
 	 *
-	 * @param	array
+	 * @param	array	$field
 	 * @return	string
 	 */
 	protected function _process_column($field)

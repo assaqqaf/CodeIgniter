@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
  * CodeIgniter
  *
@@ -24,6 +24,7 @@
  * @since		Version 3.0
  * @filesource
  */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Migration Class
@@ -285,7 +286,7 @@ class CI_Migration {
 		if ( ! $migrations = $this->find_migrations())
 		{
 			$this->_error_string = $this->lang->line('migration_none_found');
-			return false;
+			return FALSE;
 		}
 
 		$last_migration = basename(end($migrations));

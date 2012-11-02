@@ -34,7 +34,18 @@
  */
 class CI_DB_pdo_pgsql_forge extends CI_DB_pdo_forge {
 
+	/**
+	 * DROP TABLE IF statement
+	 *
+	 * @var	string
+	 */
 	protected $_drop_table_if	= 'DROP TABLE IF EXISTS';
+
+	/**
+	 * UNSIGNED support
+	 *
+	 * @var	array
+	 */
 	protected $_unsigned		= array(
 		'INT2'		=> 'INTEGER',
 		'SMALLINT'	=> 'INTEGER',
@@ -46,10 +57,18 @@ class CI_DB_pdo_pgsql_forge extends CI_DB_pdo_forge {
 		'REAL'		=> 'DOUBLE PRECISION',
 		'FLOAT'		=> 'DOUBLE PRECISION'
 	);
-	protected $_null		= 'NULL';
 
 	/**
-	 * Constructor
+	 * NULL value representation in CREATE/ALTER TABLE statements
+	 *
+	 * @var	string
+	 */
+	protected $_null		= 'NULL';
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Class constructor
 	 *
 	 * @return	void
 	 */
@@ -66,15 +85,12 @@ class CI_DB_pdo_pgsql_forge extends CI_DB_pdo_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Alter table query
+	 * ALTER TABLE
 	 *
-	 * Generates a platform-specific query so that a table can be altered
-	 * Called by add_column(), drop_column(), and column_alter(),
-	 *
-	 * @param	string	the ALTER type (ADD, DROP, CHANGE)
-	 * @param	string	the table name
-	 * @param	mixed	the column definition
-	 * @return	mixed
+	 * @param	string	$alter_type	ALTER type
+	 * @param	string	$table		Table name
+	 * @param	mixed	$field		Column definition
+	 * @return	string|string[]
 	 */
 	protected function _alter_table($alter_type, $table, $field)
  	{

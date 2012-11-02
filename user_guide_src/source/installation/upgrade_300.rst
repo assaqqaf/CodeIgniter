@@ -31,37 +31,76 @@ Step 3: Remove $autoload['core'] from your config/autoload.php
 Use of the ``$autoload['core']`` config array has been deprecated as of CodeIgniter 1.4.1 and is now removed.
 Move any entries that you might have listed there to ``$autoload['libraries']`` instead.
 
+**************************************************************
+Step 4: Add new session driver items to your config/config.php
+**************************************************************
+
+With the change from a single Session Library to the new Session Driver, two new config items have been added:
+
+   -  ``$config['sess_driver']`` selects which driver to initially load. Options are:
+       -  'cookie' (the default) for classic CodeIgniter cookie-based sessions
+       -  'native' for native PHP Session support
+       -  the name of a custom driver you have provided (see :doc:`Session Driver <../libraries/sessions>` for more info)
+   -  ``$config['sess_valid_drivers']`` provides an array of additional custom drivers to make available for loading
+
+As the new Session Driver library loads the classic Cookie driver by default and always makes 'cookie' and 'native'
+available as valid drivers, neither of these configuration items are required. However, it is recommended that you
+add them for clarity and ease of configuration in the future.
+
 ***************************************
-Step 4: Update your config/database.php
+Step 5: Update your config/database.php
 ***************************************
 
 Due to 3.0.0's renaming of Active Record to Query Builder, inside your `config/database.php`, you will
-need to rename the `$active_record` variable to `$query_builder`.
+need to rename the `$active_record` variable to `$query_builder`
+::
 
-    $active_group = 'default';
-    // $active_record = TRUE;
-    $query_builder = TRUE;
+	$active_group = 'default';
+	// $active_record = TRUE;
+	$query_builder = TRUE;
 
 *******************************
-Step 5: Move your errors folder
+Step 6: Move your errors folder
 *******************************
 
 In version 3.0.0, the errors folder has been moved from _application/errors* to _application/views/errors*.
 
+*******************************************************
+Step 7: Update your config/routes.php containing (:any)
+*******************************************************
+
+Historically, CodeIgniter has always provided the **:any** wildcard in routing,
+with the intention of providing a way to match any character **within** an URI segment.
+
+However, the **:any** wildcard is actually just an alias for a regular expression
+and used to be executed in that manner as **.+**. This is considered a bug, as it
+also matches the / (forward slash) character, which is the URI segment delimiter
+and that was never the intention. In CodeIgniter 3, the **:any** wildcard will now
+represent **[^/]+**, so that it will not match a forward slash.
+
+There are certainly many developers that have utilized this bug as an actual feature.
+If you're one of them and want to match a forward slash, please use the **.+**
+regular expression::
+
+	(.+)	// matches ANYTHING
+	(:any)	// matches any character, except for '/'
+
+
 ****************************************************************************
-Step 6: Check the calls to Array Helper's element() and elements() functions
+Step 8: Check the calls to Array Helper's element() and elements() functions
 ****************************************************************************
 
 The default return value of these functions, when the required elements
 don't exist, has been changed from FALSE to NULL.
 
 ************************************************************
-Step 7: Update usage of Database Forge's drop_table() method
+Step 9: Update usage of Database Forge's drop_table() method
 ************************************************************
 
-Up until now, ``drop_table()`` added an IF EXISTS clause by default or it didn't work at all
-with some drivers. In CodeIgniter 3.0.0, the IF EXISTS clause is no longer added by deafault
-and has an optional second parameter that allows that instead and is set to FALSE by default.
+Up until now, ``drop_table()`` added an IF EXISTS clause by default or it didn't work
+at all with some drivers. In CodeIgniter 3.0, the IF EXISTS condition is no longer added
+by deafault and has an optional second parameter that allows that instead and is set to
+FALSE by default.
 
 If your application relies on IF EXISTS, you'll have to change its usage.
 
@@ -73,12 +112,28 @@ If your application relies on IF EXISTS, you'll have to change its usage.
 	// Produces DROP TABLE IF EXISTS `table_name`
 	$this->dbforge->drop_table('table_name', TRUE);
 
-.. note:: The given example users MySQL-specific syntax, but it should work across all drivers
-	with the exception of ODBC.
+.. note:: The given example users MySQL-specific syntax, but it should work across
+	all drivers with the exception of ODBC.
 
-***************************************************************
-Step 8: Remove usage of (previously) deprecated functionalities
-***************************************************************
+***********************************************************
+Step 10: Change usage of Email library with multiple emails
+***********************************************************
+
+The :doc:`Email library <../libraries/email>` will automatically clear the
+set parameters after successfully sending emails. To override this behaviour,
+pass FALSE as the first parameter in the ``send()`` method:
+
+::
+
+	if ($this->email->send(FALSE))
+ 	{
+ 		// Parameters won't be cleared
+ 	}
+
+
+****************************************************************
+Step 11: Remove usage of (previously) deprecated functionalities
+****************************************************************
 
 In addition to the ``$autoload['core']`` configuration setting, there's a number of other functionalities
 that have been removed in CodeIgniter 3.0.0:
@@ -118,6 +173,16 @@ File helper read_file()
 
 :doc:`File Helper <../helpers/file_helper>` function ``read_file()`` is now just an alias for
 PHP's native ``file_get_contents()`` function. It is deprecated and scheduled for removal in
+CodeIgniter 3.1+.
+
+.. note:: This function is still available, but you're strongly encouraged to remove it's usage sooner
+	rather than later.
+
+String helper repeater()
+========================
+
+:doc:`String Helper <../helpers/string_helper>` function ``repeater()`` is now just an alias for
+PHP's native ``str_repeat()`` function. It is deprecated and scheduled for removal in
 CodeIgniter 3.1+.
 
 .. note:: This function is still available, but you're strongly encouraged to remove it's usage sooner

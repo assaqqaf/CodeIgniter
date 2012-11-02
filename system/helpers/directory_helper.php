@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
  * CodeIgniter
  *
@@ -24,6 +24,7 @@
  * @since		Version 1.0
  * @filesource
  */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * CodeIgniter Directory Helpers
@@ -62,7 +63,7 @@ if ( ! function_exists('directory_map'))
 			while (FALSE !== ($file = readdir($fp)))
 			{
 				// Remove '.', '..', and hidden files [optional]
-				if ( ! trim($file, '.') OR ($hidden === FALSE && $file[0] === '.'))
+				if ($file === '.' OR $file === '..' OR ($hidden === FALSE && $file[0] === '.'))
 				{
 					continue;
 				}

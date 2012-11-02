@@ -29,7 +29,7 @@ Setting your own routing rules
 Routing rules are defined in your application/config/routes.php file. In
 it you'll see an array called $route that permits you to specify your
 own routing criteria. Routes can either be specified using wildcards or
-Regular Expressions
+Regular Expressions.
 
 Wildcards
 =========
@@ -47,10 +47,19 @@ segment of the URL, and a number is found in the second segment, the
 You can match literal values or you can use two wildcard types:
 
 **(:num)** will match a segment containing only numbers.
- **(:any)** will match a segment containing any character.
+**(:any)** will match a segment containing any character (except for '/', which is the segment delimiter).
+
+.. note:: Wildcards are actually aliases for regular expressions, with
+	**:any** being translated to **[^/]+** and **:num** to **[0-9]+**,
+	respectively.
 
 .. note:: Routes will run in the order they are defined. Higher routes
 	will always take precedence over lower ones.
+
+.. note:: Route rules are not filters! Setting a rule of e.g.
+	'foo/bar/(:num)' will not prevent controller *Foo* and method
+	*bar* to be called with a non-numeric value if that is a valid
+	route.
 
 Examples
 ========
@@ -99,12 +108,39 @@ rules. Any valid regular expression is allowed, as are back-references.
 
 A typical RegEx route might look something like this::
 
-	$route['products/([a-z]+)/(\d+)'] = "$1/id_$2";
+	$route['products/([a-z]+)/(\d+)'] = '$1/id_$2';
 
 In the above example, a URI similar to products/shirts/123 would instead
-call the shirts controller class and the id_123 function.
+call the shirts controller class and the id_123 method.
 
-You can also mix and match wildcards with regular expressions.
+With regular expressions, you can also catch a segment containing a
+forward slash ('/'), which would usually represent the delimiter between
+multiple segments.
+For example, if a user accesses a password protected area of your web
+application and you wish to be able to redirect them back to the same
+page after they log in, you may find this example useful::
+
+	$route['login/(.+)'] = 'auth/login/$1';
+
+That will call the auth controller class and its ``login()`` method,
+passing everything contained in the URI after *login/* as a parameter.
+
+For those of you who don't know regular expressions and want to learn
+more about them, `regular-expressions.info <http://www.regular-expressions.info/>`
+might be a good starting point.
+
+..note:: You can also mix and match wildcards with regular expressions.
+
+Callbacks
+=========
+
+If you are using PHP >= 5.3 you can use callbacks in place of the normal routing
+rules to process the back-references. Example::
+
+	$route['products/([a-z]+)/edit/(\d+)'] = function ($product_type, $id)
+	{
+		return "catalog/product_edit/" . strtolower($product_type) . "/" . $id;
+	};
 
 Reserved Routes
 ===============
@@ -126,8 +162,8 @@ appear by default.
 This route indicates which controller class should be loaded if the
 requested controller is not found. It will override the default 404
 error page. It won't affect to the show_404() function, which will
-continue loading the default error_404.php file at
-application/errors/error_404.php.
+continue loading the default *error_404.php* file at
+*application/errors/error_404.php*.
 
 .. important:: The reserved routes must come before any wildcard or
 	regular expression routes.

@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
  * CodeIgniter
  *
@@ -24,6 +24,7 @@
  * @since		Version 1.0
  * @filesource
  */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * ODBC Forge Class
@@ -34,10 +35,28 @@
  */
 class CI_DB_odbc_forge extends CI_DB_forge {
 
+	/**
+	 * CREATE TABLE IF statement
+	 *
+	 * @var	string
+	 */
 	protected $_create_table_if	= FALSE;
+
+	/**
+	 * DROP TABLE IF statement
+	 *
+	 * @var	string
+	 */
 	protected $_drop_table_if	= FALSE;
+
+	/**
+	 * UNSIGNED support
+	 *
+	 * @var	bool|array
+	 */
 	protected $_unsigned		= FALSE;
-	protected $_null		= '';
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Field attribute AUTO_INCREMENT

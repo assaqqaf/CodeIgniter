@@ -34,22 +34,43 @@
  */
 class CI_DB_pdo_oci_forge extends CI_DB_pdo_forge {
 
+	/**
+	 * CREATE DATABASE statement
+	 *
+	 * @var	string
+	 */
 	protected $_create_database	= FALSE;
-	protected $_drop_database	= FALSE;
-	protected $_create_table_if	= 'CREATE TABLE IF NOT EXISTS';
-	protected $_unsigned		= FALSE;
-	protected $_null		= '';
 
 	/**
-	 * Alter table query
+	 * DROP DATABASE statement
 	 *
-	 * Generates a platform-specific query so that a table can be altered
-	 * Called by add_column(), drop_column(), and column_alter(),
+	 * @var	string
+	 */
+	protected $_drop_database	= FALSE;
+
+	/**
+	 * CREATE TABLE IF statement
 	 *
-	 * @param	string	the ALTER type (ADD, DROP, CHANGE)
-	 * @param	string	the column name
-	 * @param	mixed	the column definition
-	 * @return	mixed
+	 * @var	string
+	 */
+	protected $_create_table_if	= 'CREATE TABLE IF NOT EXISTS';
+
+	/**
+	 * UNSIGNED support
+	 *
+	 * @var	bool|array
+	 */
+	protected $_unsigned		= FALSE;
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * ALTER TABLE
+	 *
+	 * @param	string	$alter_type	ALTER type
+	 * @param	string	$table		Table name
+	 * @param	mixed	$field		Column definition
+	 * @return	string|string[]
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{

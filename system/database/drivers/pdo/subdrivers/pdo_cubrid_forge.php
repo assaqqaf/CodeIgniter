@@ -34,9 +34,32 @@
  */
 class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 
+	/**
+	 * CREATE DATABASE statement
+	 *
+	 * @var	string
+	 */
 	protected $_create_database	= FALSE;
+
+	/**
+	 * DROP DATABASE statement
+	 *
+	 * @var	string
+	 */
 	protected $_drop_database	= FALSE;
+
+	/**
+	 * DROP TABLE IF statement
+	 *
+	 * @var	string
+	 */
 	protected $_drop_table_if	= 'DROP TABLE IF EXISTS';
+
+	/**
+	 * UNSIGNED support
+	 *
+	 * @var	array
+	 */
 	protected $_unsigned		= array(
 		'SHORT'		=> 'INTEGER',
 		'SMALLINT'	=> 'INTEGER',
@@ -46,18 +69,16 @@ class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 		'FLOAT'		=> 'DOUBLE',
 		'REAL'		=> 'DOUBLE'
 	);
-	protected $_null		= '';
+
+	// --------------------------------------------------------------------
 
 	/**
-	 * Alter table query
+	 * ALTER TABLE
 	 *
-	 * Generates a platform-specific query so that a table can be altered
-	 * Called by add_column(), drop_column(), and column_alter(),
-	 *
-	 * @param	string	the ALTER type (ADD, DROP, CHANGE)
-	 * @param	string	the column name
-	 * @param	mixed	the column definition
-	 * @return	mixed
+	 * @param	string	$alter_type	ALTER type
+	 * @param	string	$table		Table name
+	 * @param	mixed	$field		Column definition
+	 * @return	string|string[]
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{
@@ -119,7 +140,7 @@ class CI_DB_pdo_cubrid_forge extends CI_DB_pdo_forge {
 	/**
 	 * Process indexes
 	 *
-	 * @param	string	(ignored)
+	 * @param	string	$table	(ignored)
 	 * @return	string
 	 */
 	protected function _process_indexes($table = NULL)

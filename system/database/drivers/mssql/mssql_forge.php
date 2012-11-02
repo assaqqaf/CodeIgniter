@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
  * CodeIgniter
  *
@@ -24,6 +24,7 @@
  * @since		Version 1.0
  * @filesource
  */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * MS SQL Forge Class
@@ -34,8 +35,25 @@
  */
 class CI_DB_mssql_forge extends CI_DB_forge {
 
+	/**
+	 * CREATE TABLE IF statement
+	 *
+	 * @var	string
+	 */
 	protected $_create_table_if	= "IF NOT EXISTS (SELECT * FROM sysobjects WHERE ID = object_id(N'%s') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)\nCREATE TABLE";
+
+	/**
+	 * DROP TABLE IF statement
+	 *
+	 * @var	string
+	 */
 	protected $_drop_table_if	= "IF EXISTS (SELECT * FROM sysobjects WHERE ID = object_id(N'%s') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)\nDROP TABLE";
+
+	/**
+	 * UNSIGNED support
+	 *
+	 * @var	array
+	 */
 	protected $_unsigned		= array(
 		'TINYINT'	=> 'SMALLINT',
 		'SMALLINT'	=> 'INT',
@@ -43,16 +61,15 @@ class CI_DB_mssql_forge extends CI_DB_forge {
 		'REAL'		=> 'FLOAT'
 	);
 
+	// --------------------------------------------------------------------
+
 	/**
-	 * Alter table query
+	 * ALTER TABLE
 	 *
-	 * Generates a platform-specific query so that a table can be altered
-	 * Called by add_column(), drop_column(), and column_alter(),
-	 *
-	 * @param	string	the ALTER type (ADD, DROP, CHANGE)
-	 * @param	string	the table name
-	 * @param	mixed	the column definition
-	 * @return	mixed
+	 * @param	string	$alter_type	ALTER type
+	 * @param	string	$table		Table name
+	 * @param	mixed	$field		Column definition
+	 * @return	string|string[]
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{

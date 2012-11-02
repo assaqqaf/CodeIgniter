@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
  * CodeIgniter
  *
@@ -24,6 +24,7 @@
  * @since		Version 1.0
  * @filesource
  */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * CodeIgniter Typography Helpers
@@ -60,16 +61,15 @@ if ( ! function_exists('auto_typography'))
 	/**
 	 * Auto Typography Wrapper Function
 	 *
-	 * @param	string
-	 * @param	bool	whether to allow javascript event handlers
-	 * @param	bool	whether to reduce multiple instances of double newlines to two
+	 * @param	string	$str
+	 * @param	bool	$reduce_linebreaks = FALSE	whether to reduce multiple instances of double newlines to two
 	 * @return	string
 	 */
-	function auto_typography($str, $strip_js_event_handlers = TRUE, $reduce_linebreaks = FALSE)
+	function auto_typography($str, $reduce_linebreaks = FALSE)
 	{
 		$CI =& get_instance();
 		$CI->load->library('typography');
-		return $CI->typography->auto_typography($str, $strip_js_event_handlers, $reduce_linebreaks);
+		return $CI->typography->auto_typography($str, $reduce_linebreaks);
 	}
 }
 

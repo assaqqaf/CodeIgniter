@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
  * CodeIgniter
  *
@@ -24,6 +24,7 @@
  * @since		Version 1.0
  * @filesource
  */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * MySQLi Forge Class
@@ -34,7 +35,18 @@
  */
 class CI_DB_mysqli_forge extends CI_DB_forge {
 
+	/**
+	 * CREATE DATABASE statement
+	 *
+	 * @var	string
+	 */
 	protected $_create_database	= 'CREATE DATABASE %s CHARACTER SET %s COLLATE %s';
+
+	/**
+	 * UNSIGNED support
+	 *
+	 * @var	array
+	 */
 	protected $_unsigned		= array(
 		'TINYINT',
 		'SMALLINT',
@@ -49,10 +61,18 @@ class CI_DB_mysqli_forge extends CI_DB_forge {
 		'DECIMAL',
 		'NUMERIC'
 	);
-	protected $_null		= 'NULL';
 
 	/**
-	 * Constructor
+	 * NULL value representation in CREATE/ALTER TABLE statements
+	 *
+	 * @var	string
+	 */
+	protected $_null		= 'NULL';
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Class constructor
 	 *
 	 * @return	void
 	 */
@@ -66,15 +86,12 @@ class CI_DB_mysqli_forge extends CI_DB_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Alter table query
+	 * ALTER TABLE
 	 *
-	 * Generates a platform-specific query so that a table can be altered
-	 * Called by add_column(), drop_column(), and column_alter(),
-	 *
-	 * @param	string	the ALTER type (ADD, DROP, CHANGE)
-	 * @param	string	the column name
-	 * @param	mixed	the column definition
-	 * @return	mixed
+	 * @param	string	$alter_type	ALTER type
+	 * @param	string	$table		Table name
+	 * @param	mixed	$field		Column definition
+	 * @return	string|string[]
 	 */
 	protected function _alter_table($alter_type, $table, $field)
 	{
@@ -113,9 +130,9 @@ class CI_DB_mysqli_forge extends CI_DB_forge {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Process a single column
+	 * Process column
 	 *
-	 * @param	array
+	 * @param	array	$field
 	 * @return	string
 	 */
 	protected function _process_column($field)
@@ -135,7 +152,7 @@ class CI_DB_mysqli_forge extends CI_DB_forge {
 	/**
 	 * Process indexes
 	 *
-	 * @param	string	(ignored)
+	 * @param	string	$table	(ignored)
 	 * @return	string
 	 */
 	protected function _process_indexes($table = NULL)
