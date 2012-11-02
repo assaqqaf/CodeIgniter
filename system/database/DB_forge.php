@@ -400,17 +400,13 @@ abstract class CI_DB_forge {
 		}
 
 		// _create_table will usually have the following format: "%s %s (%s\n)"
-		$sql = array(
-				sprintf($this->_create_table.';',
-					$sql,
-					$this->db->escape_identifiers($table),
-					$columns
-				)
-			);
+		$sql = sprintf($this->_create_table.';',
+			$sql,
+			$this->db->escape_identifiers($table),
+			$columns
+		);
 
-		return ($this->_create_table_keys === TRUE)
-			? $sql
-			: array_merge($sql, $this->_create_indexes($table));
+		return $sql;
 	}
 
 	// --------------------------------------------------------------------
@@ -952,7 +948,7 @@ abstract class CI_DB_forge {
 	 * @param	string	$table
 	 * @return	string
 	 */
-	protected function _create_indexes($table = NULL)
+	protected function _process_indexes($table = NULL)
 	{
 		$table = $this->db->escape_identifiers($table);
 		$sqls = array();
