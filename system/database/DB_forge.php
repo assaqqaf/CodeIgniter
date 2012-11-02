@@ -935,7 +935,7 @@ abstract class CI_DB_forge {
 			}
 		}
 
-		if (count($primary_keys) > 0)
+		if (count($this->primary_keys) > 0)
 		{
 			$sql .= ",\n\tCONSTRAINT ".$this->db->escape_identifiers('pk_'.implode('_', $this->primary_keys))
 				.' PRIMARY KEY('.implode(', ', $this->db->escape_identifiers($this->primary_keys)).')';
