@@ -36,6 +36,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 abstract class CI_DB_forge {
 
 	/**
+	 * Database object
+	 *
+	 * @var	object
+	 */
+	public $db;
+
+	/**
 	 * Fields data
 	 *
 	 * @var	array
@@ -337,17 +344,17 @@ abstract class CI_DB_forge {
 			}
 		}
 
-		if (($result = $this->db->query($sql)) !== FALSE && ! empty($this->db->data_cache['table_names']))
+		if (($result = $this->db->query($sql)) !== FALSE)
 		{
-			$this->db->data_cache['table_names'][] = $table;
-		}
+			empty($this->db->data_cache['table_names']) OR $this->db->data_cache['table_names'][] = $table;
 
-		// Most databases don't support creating indexes from within the CREATE TABLE statement
-		if ( ! empty($this->keys))
-		{
-			for ($i = 0, $sqls = $this->_process_indexes($table), $c = count($sqls); $i < $c; $i++)
+			// Most databases don't support creating indexes from within the CREATE TABLE statement
+			if ( ! empty($this->keys))
 			{
-				$this->db->query($sqls[$i]);
+				for ($i = 0, $sqls = $this->_process_indexes($table), $c = count($sqls); $i < $c; $i++)
+				{
+					$this->db->query($sqls[$i]);
+				}
 			}
 		}
 
@@ -405,7 +412,7 @@ abstract class CI_DB_forge {
 			$this->db->escape_identifiers($table),
 			$columns
 		);
-var_dump($sql);
+
 		return $sql;
 	}
 
@@ -708,7 +715,6 @@ var_dump($sql);
 				$this->_attr_type($attributes);
 				$this->_attr_unsigned($attributes, $field);
 			}
-
 
 			$field = array(
 					'name'			=> $key,

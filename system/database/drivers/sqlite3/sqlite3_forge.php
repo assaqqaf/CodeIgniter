@@ -59,7 +59,7 @@ class CI_DB_sqlite3_forge extends CI_DB_forge {
 	public function __construct()
 	{
 		parent::__construct();
-
+		is_string($this->_create_table_if) AND var_dump($this->db->version());
 		if (version_compare($this->db->version(), '3.3', '<'))
 		{
 			$this->create_table_if = FALSE;
