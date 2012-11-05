@@ -356,11 +356,7 @@ class CI_Input {
 					// Some proxies typically list the whole chain of IP
 					// addresses through which the client has reached us.
 					// e.g. client_ip, proxy_ip1, proxy_ip2, etc.
-					if (strpos($spoof, ',') !== FALSE)
-					{
-						$spoof = explode(',', $spoof, 2);
-						$spoof = $spoof[0];
-					}
+					sscanf($spoof, '%[^,]', $spoof);
 
 					if ( ! $this->valid_ip($spoof))
 					{
@@ -430,7 +426,7 @@ class CI_Input {
 					}
 
 					// Split the netmask length off the network address
-					list($netaddr, $masklen) = explode('/', $proxy_ips[$i], 2);
+					sscanf($proxy_ips[$i], '%[^/]/%d', $netaddr, $masklen);
 
 					// Again, an IPv6 address is most likely in a compressed form
 					if ($separator === ':')
@@ -695,7 +691,7 @@ class CI_Input {
 	 */
 	protected function _clean_input_keys($str)
 	{
-		if ( ! preg_match('/^[a-z0-9:_\/-]+$/i', $str))
+		if ( ! preg_match('/^[a-z0-9:_\/|-]+$/i', $str))
 		{
 			set_status_header(503);
 			exit('Disallowed Key Characters.');
