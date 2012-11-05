@@ -398,7 +398,7 @@ abstract class CI_DB_forge {
 		}
 
 		$columns = implode(',', $columns)
-				.$this->_process_primary_keys();
+				.$this->_process_primary_keys($table);
 
 		// Are indexes created from within the CREATE TABLE statement? (e.g. in MySQL)
 		if ($this->_create_table_keys === TRUE)
@@ -923,9 +923,10 @@ abstract class CI_DB_forge {
 	/**
 	 * Process primary keys
 	 *
+	 * @param	string	$table	Table name
 	 * @return	string
 	 */
-	protected function _process_primary_keys()
+	protected function _process_primary_keys($table)
 	{
 		$sql = '';
 
@@ -939,7 +940,7 @@ abstract class CI_DB_forge {
 
 		if (count($this->primary_keys) > 0)
 		{
-			$sql .= ",\n\tCONSTRAINT ".$this->db->escape_identifiers('pk_'.implode('_', $this->primary_keys))
+			$sql .= ",\n\tCONSTRAINT ".$this->db->escape_identifiers('pk_'.$table)
 				.' PRIMARY KEY('.implode(', ', $this->db->escape_identifiers($this->primary_keys)).')';
 		}
 
